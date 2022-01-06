@@ -1,0 +1,1 @@
+time="2021-12-30T14:39:37+04:00" level=info msg=sso.scd.edu.om client_ip=127.0.0.1 latency_time=2.8079ms req_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0" req_method=GET req_size=1982 req_uri=/favicon.ico request_post_data= response_data="<nil>" response_msg= status_code=200

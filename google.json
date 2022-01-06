@@ -1,0 +1,16 @@
+{
+    "client_id": "124170954478-itopf4l05tsq6kcb2fkfb23mn8anvti3.apps.googleusercontent.com",
+    "project_id": "scd-sso",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "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",
+    "redirect_uris": [
+        "http://sso.scd.edu.om:1234/sso/v1/callback"
+    ],
+    "javascript_origins": [
+        "http://testsso.com",
+        "http://api.scd.edu.om"
+    ]
+
+}
