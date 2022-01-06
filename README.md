@@ -1,0 +1,2 @@
+# sso.scd.edu.om
+ 
