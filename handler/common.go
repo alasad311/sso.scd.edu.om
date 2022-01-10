@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 	"path"
 	"time"
@@ -15,10 +14,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"sso.scd.edu.om/entity"
 )
-
-func EmptyResponse(c *gin.Context) {
-	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"Error": 501, "msg": "No Authorization header provided"})
-}
 
 type bodyLogWriter struct {
 	gin.ResponseWriter
@@ -135,4 +130,12 @@ func LoggerToFile(message string) gin.HandlerFunc {
 
 	}
 
+}
+
+func PrettyStruct(data interface{}) (string, error) {
+	val, err := json.MarshalIndent(data, "", "    ")
+	if err != nil {
+		return "", err
+	}
+	return string(val), nil
 }

@@ -4,10 +4,14 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
+	"sso.scd.edu.om/structs"
 )
 
 type Credentials struct {
@@ -56,6 +60,42 @@ func RandToken() string {
 	return base64.StdEncoding.EncodeToString(b)
 
 }
-func getCode(code string) {
 
+func AuthHandler(c *gin.Context, code string, state string) (structs.UserSession, structs.UserLogin, error) {
+	session := sessions.Default(c)
+	token, err := conf.Exchange(c, code)
+	if err != nil {
+		return structs.UserSession{}, structs.UserLogin{}, err
+	}
+	tokenID, _ := token.Extra("id_token").(string)
+	scope, _ := token.Extra("scope").(string)
+	session.Set("TokenID", tokenID)
+	session.Save()
+	client := conf.Client(c, token)
+	userinfo, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
+	if err != nil {
+		return structs.UserSession{}, structs.UserLogin{}, err
+	}
+	defer userinfo.Body.Close()
+	data, _ := ioutil.ReadAll(userinfo.Body)
+
+	users := structs.UserLogin{}
+	userSessions := structs.UserSession{}
+	if err = json.Unmarshal(data, &users); err != nil {
+		return structs.UserSession{}, structs.UserLogin{}, err
+	}
+
+	userSessions.UserAgent = c.Request.UserAgent()
+	userSessions.UserIP = c.ClientIP()
+	userSessions.UserState = state
+	userSessions.GoogleCode = code
+	userSessions.GoogleAccessToken = token.AccessToken
+	userSessions.GoogleExpireIn = token.Expiry
+	userSessions.GoogleTokenType = token.Type()
+	userSessions.GoogleIDToken = tokenID
+	userSessions.GoogleScope = scope
+	userSessions.GoogleRefreshToken = token.RefreshToken
+	fmt.Println(token.RefreshToken)
+
+	return userSessions, users, nil
 }
