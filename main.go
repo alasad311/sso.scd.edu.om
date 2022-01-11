@@ -1,8 +1,15 @@
 package main
 
-import route "sso.scd.edu.om/routes"
+import (
+	"sso.scd.edu.om/module"
+	route "sso.scd.edu.om/routes"
+)
 
 func main() {
-
-	route.SetupRoutes()
+	//DB connection
+	db, dbError := module.DBConnectionSSO()
+	if dbError != nil {
+		panic(dbError)
+	}
+	route.SetupRoutes(db)
 }

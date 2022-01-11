@@ -5,12 +5,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"io/ioutil"
 	"sso.scd.edu.om/structs"
 )
 
@@ -70,7 +71,7 @@ func AuthHandler(c *gin.Context, code string, state string) (structs.UserSession
 	tokenID, _ := token.Extra("id_token").(string)
 	scope, _ := token.Extra("scope").(string)
 	session.Set("TokenID", tokenID)
-	session.Save()
+
 	client := conf.Client(c, token)
 	userinfo, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
@@ -84,18 +85,18 @@ func AuthHandler(c *gin.Context, code string, state string) (structs.UserSession
 	if err = json.Unmarshal(data, &users); err != nil {
 		return structs.UserSession{}, structs.UserLogin{}, err
 	}
-
+	session.Set("UserEmail", users.ClaimUserEmail)
 	userSessions.UserAgent = c.Request.UserAgent()
 	userSessions.UserIP = c.ClientIP()
 	userSessions.UserState = state
 	userSessions.GoogleCode = code
 	userSessions.GoogleAccessToken = token.AccessToken
-	userSessions.GoogleExpireIn = token.Expiry
+	userSessions.GoogleExpireIn = token.Expiry.Unix()
 	userSessions.GoogleTokenType = token.Type()
 	userSessions.GoogleIDToken = tokenID
 	userSessions.GoogleScope = scope
-	userSessions.GoogleRefreshToken = token.RefreshToken
+	//userSessions.GoogleRefreshToken = token.RefreshToken
 	fmt.Println(token.RefreshToken)
-
+	session.Save()
 	return userSessions, users, nil
 }
