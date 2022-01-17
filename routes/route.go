@@ -24,6 +24,7 @@ func SetupRoutes(db *gorm.DB) {
 	httpRouter.Use(cors.Default())
 	path, _ := os.Executable()
 	httpRouter.LoadHTMLGlob(path + "/web/pages/*")
+	fmt.Println(path + "/web/pages/*")
 	httpRouter.Static("/static", path+"/web/assets")
 	httpRouter.GET("/sso/v1/login", func(c *gin.Context) {
 		urlRedirect, _ := c.GetQuery("redirect")
