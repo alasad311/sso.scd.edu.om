@@ -117,6 +117,6 @@ func SetupRoutes(db *gorm.DB) {
 		c.HTML(http.StatusOK, "pagenotfound.html", gin.H{})
 	})
 	//httpRouter.RunTLS(":1234", "certs/server.crt", "certs/server.key")
-	httpRouter.Run(":1234")
+	httpRouter.Run(":80")
 
 }
