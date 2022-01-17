@@ -2,10 +2,12 @@ package route
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
+
+	"gorm.io/gorm"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -20,8 +22,9 @@ func SetupRoutes(db *gorm.DB) {
 	httpRouter.Use(handler.LoggerToFile("sso.scd.edu.om"))
 	gin.SetMode(gin.ReleaseMode)
 	httpRouter.Use(cors.Default())
-	httpRouter.LoadHTMLGlob("web/pages/*")
-	httpRouter.Static("/static", "./web/assets")
+	path, _ := os.Executable()
+	httpRouter.LoadHTMLGlob(path + "/web/pages/*")
+	httpRouter.Static("/static", path+"/web/assets")
 	httpRouter.GET("/sso/v1/login", func(c *gin.Context) {
 		urlRedirect, _ := c.GetQuery("redirect")
 		_, urlErr := url.ParseRequestURI(urlRedirect)
