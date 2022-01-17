@@ -26,7 +26,6 @@ func SetupRoutes(db *gorm.DB) {
 	ex, _ := os.Executable()
 	exPath := filepath.Dir(ex)
 	httpRouter.LoadHTMLGlob(exPath + "/web/pages/*")
-	fmt.Println(exPath + "/web/pages/*")
 	httpRouter.Static("/static", exPath+"/web/assets")
 	httpRouter.GET("/sso/v1/login", func(c *gin.Context) {
 		urlRedirect, _ := c.GetQuery("redirect")
