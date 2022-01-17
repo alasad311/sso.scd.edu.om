@@ -46,7 +46,7 @@ func GetDetailsFromJson() {
 	conf = &oauth2.Config{
 		ClientID:     c.ClientID,
 		ClientSecret: c.ClientSecret,
-		RedirectURL:  "http://sso.scd.edu.om:1234/sso/v1/callback",
+		RedirectURL:  "http://sso.scd.edu.om/sso/v1/callback",
 		Scopes:       scopes,
 		Endpoint:     google.Endpoint,
 	}
