@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -32,7 +34,9 @@ func Setup() string {
 }
 
 func GetDetailsFromJson() {
-	file, err := ioutil.ReadFile("./google.json")
+	ex, _ := os.Executable()
+	exPath := filepath.Dir(ex)
+	file, err := ioutil.ReadFile(exPath + "./google.json")
 	if err != nil {
 		glog.Fatalf("[Gin-OAuth] File error: %v\n", err)
 	}
