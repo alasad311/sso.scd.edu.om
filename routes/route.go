@@ -35,12 +35,14 @@ func SetupRoutes(db *gorm.DB) {
 				"ErrorTitle":   "Error SSO-106",
 				"ErrorMessage": "Malformed or missing header.",
 			})
+			return
 		}
 		if !strings.Contains(urlC.Host, "scd.edu.om") {
 			c.HTML(http.StatusOK, "error500.html", gin.H{
 				"ErrorTitle":   "Error SSO-106",
 				"ErrorMessage": "Malformed or missing header.",
 			})
+			return
 		}
 		if len(urlRedirect) > 0 {
 			isActive := module.CreateSession(c, urlRedirect)
@@ -48,6 +50,7 @@ func SetupRoutes(db *gorm.DB) {
 				c.HTML(http.StatusOK, "login.html", gin.H{
 					"GoogleLink": module.Setup(),
 				})
+				return
 			} else {
 				location := url.URL{Path: urlRedirect}
 				c.Redirect(http.StatusFound, location.RequestURI())
