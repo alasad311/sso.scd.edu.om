@@ -22,7 +22,7 @@ func SetupRoutes(db *gorm.DB) {
 	httpRouter.Use(handler.LoggerToFile("sso.scd.edu.om"))
 	gin.SetMode(gin.ReleaseMode)
 	httpRouter.Use(cors.Default())
-	path, _ := os.Executable()
+	path, _ := os.Getwd()
 	httpRouter.LoadHTMLGlob(path + "/web/pages/*")
 	fmt.Println(path + "/web/pages/*")
 	httpRouter.Static("/static", path+"/web/assets")
