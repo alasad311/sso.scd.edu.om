@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"gorm.io/gorm"
@@ -22,10 +23,11 @@ func SetupRoutes(db *gorm.DB) {
 	httpRouter.Use(handler.LoggerToFile("sso.scd.edu.om"))
 	gin.SetMode(gin.ReleaseMode)
 	httpRouter.Use(cors.Default())
-	path, _ := os.Getwd()
-	httpRouter.LoadHTMLGlob(path + "/web/pages/*")
-	fmt.Println(path + "/web/pages/*")
-	httpRouter.Static("/static", path+"/web/assets")
+	ex, _ := os.Executable()
+	exPath := filepath.Dir(ex)
+	httpRouter.LoadHTMLGlob(exPath + "/web/pages/*")
+	fmt.Println(exPath + "/web/pages/*")
+	httpRouter.Static("/static", exPath+"/web/assets")
 	httpRouter.GET("/sso/v1/login", func(c *gin.Context) {
 		urlRedirect, _ := c.GetQuery("redirect")
 		_, urlErr := url.ParseRequestURI(urlRedirect)
