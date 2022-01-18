@@ -13,7 +13,7 @@ import (
 )
 
 func SessionConnection() gin.HandlerFunc {
-	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "4a2d1148ce53a323cdf62a65d24b8e70dedd4457e7eb2fa9250f62b8b74009b5", []byte("cL]Pept6#AOM4L~"))
+	store, _ := redis.NewStore(10, "tcp", "192.168.11.154:6379", "4a2d1148ce53a323cdf62a65d24b8e70dedd4457e7eb2fa9250f62b8b74009b5", []byte("cL]Pept6#AOM4L~"))
 	store.Options(sessions.Options{Path: "/", MaxAge: 12 * 3600, Domain: "scd.edu.om", HttpOnly: true})
 	return sessions.Sessions("SCD-SSO", store)
 }
