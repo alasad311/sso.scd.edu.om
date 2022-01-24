@@ -54,6 +54,7 @@ func LoginUserIntoDB(c *gin.Context, UserData structs.UserLogin, userSession str
 	session.Set("UserEmail", UserData.ClaimUserEmail)
 	session.Set("UserName", UserData.ClaimUserName)
 	session.Set("UserProfile", UserData.ClaimUserPicture)
+	session.Set("UserLocale", UserData.ClaimUserLocale)
 	//check if user exsist into the database
 	usersResult := db.Where("claim_user_email = ?", UserData.ClaimUserEmail).FirstOrCreate(&UserData)
 	//result := db.Create(&UserData)
