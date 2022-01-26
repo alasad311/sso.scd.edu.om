@@ -65,6 +65,7 @@ func LoginUserIntoDB(c *gin.Context, UserData structs.UserLogin, userSession str
 	if createSession.Error != nil {
 		return "", false, createSession.Error
 	}
+
 	session.Save()
 	return session.Get("UrlRedirect").(string), true, nil
 }
