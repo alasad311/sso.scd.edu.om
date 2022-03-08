@@ -29,7 +29,7 @@ func SetupRoutes(db *gorm.DB) {
 	httpRouter.Static("/static", exPath+"/web/assets")
 	httpRouter.GET("/sso/v1/login", func(c *gin.Context) {
 		urlRedirect, _ := c.GetQuery("redirect")
-		urlC, urlErr := url.ParseRequestURI(urlRedirect)
+		_, urlErr := url.ParseRequestURI(urlRedirect)
 		if urlErr != nil {
 			c.HTML(http.StatusOK, "error500.html", gin.H{
 				"ErrorTitle":   "Error SSO-106",
@@ -37,13 +37,13 @@ func SetupRoutes(db *gorm.DB) {
 			})
 			return
 		}
-		if !strings.Contains(urlC.Host, "scd.edu.om") {
-			c.HTML(http.StatusOK, "error500.html", gin.H{
-				"ErrorTitle":   "Error SSO-106",
-				"ErrorMessage": "Malformed or missing header.",
-			})
-			return
-		}
+		//if !strings.Contains(urlC.Host, "scd.edu.om") {
+		//	c.HTML(http.StatusOK, "error500.html", gin.H{
+		//		"ErrorTitle":   "Error SSO-106",
+		//		"ErrorMessage": "Malformed or missing header.",
+		//	})
+		//	return
+		//}
 		if len(urlRedirect) > 0 {
 			isActive := module.CreateSession(c, urlRedirect)
 			if isActive == false {
